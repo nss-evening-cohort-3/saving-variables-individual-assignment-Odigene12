@@ -66,6 +66,10 @@
     <Compile Include="Migrations\201609192258187_InitialCreate.Designer.cs">
       <DependentUpon>201609192258187_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201609200216370_AddVariableName.cs" />
+    <Compile Include="Migrations\201609200216370_AddVariableName.Designer.cs">
+      <DependentUpon>201609200216370_AddVariableName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Variables.cs" />
     <Compile Include="Program.cs" />
@@ -78,6 +82,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201609192258187_InitialCreate.resx">
       <DependentUpon>201609192258187_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201609200216370_AddVariableName.resx">
+      <DependentUpon>201609200216370_AddVariableName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

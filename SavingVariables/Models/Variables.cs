@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace SavingVariables.Models
 {
-    public class Variables
+    public class Variable
     {
         //This is the primary key for the Model
         [Key]
         public int VariableId { get; set; }
 
         //The variable is going to be a character since variables are not words.
-        public char Variable { get; set; }
+        public char VariableName { get; set; }
 
         //This is the value of the variable as an integer.
         public int Value { get; set; }
