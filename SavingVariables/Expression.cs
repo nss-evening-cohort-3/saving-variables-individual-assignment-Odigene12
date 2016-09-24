@@ -6,12 +6,16 @@ using System.Text.RegularExpressions;
 using SavingVariables.Models;
 using System.Threading.Tasks;
 using SavingVariables.DAL;
+using System.Data.Entity;
 
 namespace SavingVariables
 {
     public class Expression
     {
         Variable forexpress = new Variable();
+        Command storeexpression = new Command();
+
+
         public string lastq { get; set; }
         //Check to make sure the user is inputing the expression correctly
         public bool MatchCheck(string input)
@@ -45,23 +49,21 @@ namespace SavingVariables
 
         public bool CheckForCommand(string userinput)
         {
-            char userCharacter;
 
-            if (userinput == "quit" || userinput == "exit")
+            if (userinput == "clear all" || userinput == "remove all" || userinput == "delete all")
             {
-                Environment.Exit(1);
-            }
-            else if (userinput == "clear all" || userinput == "remove all" || userinput == "delete all")
-            {
+                return true;
                 //clear List of variables.
             }
             else if (userinput == "show all")
             {
-                //get all variables, loop through them and write the variables and their values in the console. 
+                return true;
+
             }
-            else if ()
+            else if (userinput == "clear (varable)")
             {
                 /*do a condition for evaluating if the user wants to clear variable from data.*/
+                return true;
             }
             else if (userinput == "lastq")
             {
@@ -70,7 +72,35 @@ namespace SavingVariables
             else return false;
         }
 
-        public Variable ExtractConstantAndValue(string input)
+
+        public string CommandExtraction(string userexpression)
+        {
+            if (CheckForCommand(userexpression) == true)
+            {
+                string commandPattern = @"^(?<command>[\w]+ \s* (?<command2>[\w]+)$";
+                Match matchcommand = Regex.Match(userexpression, commandPattern);
+                firstword = matchcommand.Groups["command"].Value;
+                secondword = matchcommand.Groups["command2"].Value;
+                string command = firstword + secondword;
+                storeexpression.MatchCommand(firstword, secondword);
+                if (storeexpression.MatchCommand(firstword, secondword) == secondword)
+                {
+                    char uservariable = System.Convert.ToChar(secondword);
+                }
+                else
+                {
+                    return "not a variable";
+                }
+                return command;
+
+            }
+
+            else return "Extraction Failed";
+        }
+
+
+        //Use a Regex expression to make sure you extract the variable and value in each user expression and attach them to the variable and value property of the DbSet.
+        public Variable ExtractVariableAndValue(string input)
         {
             if (MatchCheck(input) == true)
             {
@@ -99,5 +129,9 @@ namespace SavingVariables
 
         public int variableValue { get; set; }
 
+        public string firstword { get; set; }
+        public string secondword { get; set; }
+
+        public char uservariable { get; set; }
     }
 }

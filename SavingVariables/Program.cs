@@ -13,9 +13,10 @@ namespace SavingVariables
         static void Main(string[] args)
         {
             Expression newexpress = new Expression();
+            Command forprogram = new Command();
             VariableContext context = new VariableContext();
             VariableRepository repo = new VariableRepository(context);
-
+           
             
             
 
@@ -28,25 +29,42 @@ namespace SavingVariables
                 Console.Write(prompt);
                 string userinput = Console.ReadLine().ToLower();
 
-                newexpress.CheckForVariableCall(userinput);
-                newexpress.MatchCheck(userinput);
-                newexpress.CheckForCommand(userinput);
 
-                if (newexpress.MatchCheck(userinput) == true)
+                if (newexpress.MatchCheck(userinput))
                 {
-                    var uservariable = newexpress.ExtractConstantAndValue(userinput);
+                    var uservariable = newexpress.ExtractVariableAndValue(userinput);
                     newexpress.lastq = userinput;
                     repo.AddVariable(uservariable);
+                    Console.WriteLine("Variable has now been saved");
                 }
-                else if (newexpress.CheckForVariableCall(userinput) == true)
+                else if (newexpress.CheckForVariableCall(userinput))
                 {
-                    var returnedVariableValue = repo.FindAndReturnVariableValue(userinput);
+                    var returnedVariable = repo.FindAndReturnVariable(userinput);
+                    var returnedVariableValue = returnedVariable.Value;
 
                     Console.WriteLine(returnedVariableValue);
                 }
-                else if (newexpress.CheckForCommand(userinput) == true)
+                else if (newexpress.CheckForCommand(userinput))
                 {
-                    //Do a command
+                    newexpress.CommandExtraction(userinput);
+                   
+                    if (userinput == "clear all" || userinput == "remove all" || userinput == "delete all")
+                    {
+                        //This will clear all the variables in the database.
+                        repo.ClearAllVariables();
+                        Console.WriteLine("Repo has now been cleared");
+                    }
+                    else if (userinput.Contains(newexpress.uservariable))
+                    {
+                        //Find the variable that needs to be removed and remove it.
+                       var removed_variable = repo.FindAndReturnVariable(userinput);
+                        repo.RemoveVariable(removed_variable);
+                    }
+                }
+                else if (userinput == "exit" || userinput == "quit")
+                {
+                    Console.WriteLine("Bye");
+                    Environment.Exit(1);
                 }
                 else Console.WriteLine("Please Enter a Valid Command");
             }

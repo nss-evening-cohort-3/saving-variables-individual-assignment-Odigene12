@@ -44,6 +44,8 @@ namespace SavingVariables.Tests.DAL
             //Tell the repo what to do when it sees a remove method on the DbSet
             mockVariablesTable.Setup(t => t.Remove(It.IsAny<Variable>())).Callback((Variable letter) => variableList.Remove(letter));
 
+            //Tell the repo what to do when it sees a RemoveRange to remove the range.
+            mockVariablesTable.Setup(t => t.RemoveRange(It.IsAny<IEnumerable<Variable>>())).Callback((IEnumerable<Variable> variables) => variableList.Clear());
         }
 
         [TestInitialize]
@@ -133,10 +135,34 @@ namespace SavingVariables.Tests.DAL
             repo.AddVariable(testVariable3);
 
             //locate the variable you need and return the value
-            int returnValue = repo.FindAndReturnVariableValue(uservariable);
+            Variable returnedVariable = repo.FindAndReturnVariable(uservariable);
+            var returnedVariableValue = returnedVariable.Value;
 
             //Assert
-            Assert.AreEqual(55, returnValue);
+            Assert.AreEqual(55, returnedVariableValue);
+        }
+
+        //Create a method that clears all Variable items in the list
+        [TestMethod]
+        public void CanIClearAllVariables()
+        {
+            //Arrange
+            var repo = new VariableRepository(myContext.Object);//my Mock context
+            var testVariable1 = new Variable { VariableId = 2, VariableName = "b", Value = 45 };
+            var testVariable2 = new Variable { VariableId = 3, VariableName = "c", Value = 55 };
+            var testVariable3 = new Variable { VariableId = 4, VariableName = "d", Value = 75 };
+
+            //Act
+            repo.AddVariable(testVariable1);
+            repo.AddVariable(testVariable2);
+            repo.AddVariable(testVariable3);
+
+            repo.ClearAllVariables();
+
+
+
+            //Assert
+            Assert.AreEqual(0, variableList.Count());
         }
     }
 }
