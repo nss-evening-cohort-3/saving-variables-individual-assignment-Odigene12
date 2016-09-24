@@ -14,7 +14,7 @@ namespace SavingVariables.Models
         public int VariableId { get; set; }
 
         //The variable is going to be a character since variables are not words.
-        public char VariableName { get; set; }
+        public string VariableName { get; set; }
 
         //This is the value of the variable as an integer.
         public int Value { get; set; }

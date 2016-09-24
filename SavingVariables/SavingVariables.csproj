@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="DAL\VariableContext.cs" />
     <Compile Include="DAL\VariableRepository.cs" />
+    <Compile Include="Expression.cs" />
     <Compile Include="Migrations\201609192258187_InitialCreate.cs" />
     <Compile Include="Migrations\201609192258187_InitialCreate.Designer.cs">
       <DependentUpon>201609192258187_InitialCreate.cs</DependentUpon>

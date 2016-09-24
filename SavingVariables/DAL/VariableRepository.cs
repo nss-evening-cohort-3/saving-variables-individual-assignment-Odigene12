@@ -9,6 +9,7 @@ namespace SavingVariables.DAL
 {
     public class VariableRepository
     {
+
         //create a private data member for your Db context to be injected into a contructor 
         private VariableContext context { get; }
 
@@ -37,6 +38,15 @@ namespace SavingVariables.DAL
         {
             context.Variables.Remove(userVariable);
             context.SaveChanges();
+        }
+
+        public int FindAndReturnVariableValue(string uservariable)
+        {
+            //Get all of the variables in the list and return the value of the variable that matches the uservariable that the user commands.
+
+            Variable found_variable = context.Variables.FirstOrDefault(v => v.VariableName.ToLower() == uservariable.ToLower());
+
+            return found_variable.Value;
         }
     }
 }

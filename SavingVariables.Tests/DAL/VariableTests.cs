@@ -22,7 +22,7 @@ namespace SavingVariables.Tests.DAL
         //Create a list for your DbSet that will be used for testing.
         List<Variable> variableList = new List<Variable>()
         {
-            new Variable {VariableName = 'a', Value = 1, VariableId = 1 }
+            new Variable {VariableName = "a", Value = 1, VariableId = 1 }
         };
 
         public void ConnectingToDatabase()
@@ -95,7 +95,7 @@ namespace SavingVariables.Tests.DAL
             //Act
 
             //Create a new variable object to add to list.
-            Variable newvariable = new Variable { VariableId = 2, VariableName = 'b', Value = 15 };
+            Variable newvariable = new Variable { VariableId = 2, VariableName = "b", Value = 15 };
             repo.AddVariable(newvariable);
             //Assert
             Assert.AreEqual(variableList.Count, 2);
@@ -109,12 +109,34 @@ namespace SavingVariables.Tests.DAL
         {
             //Arrange
             var repo = new VariableRepository(myContext.Object);//my Mock context
-            var testVariable = new Variable { VariableId = 2, VariableName = 'b', Value = 14 };
+            var testVariable = new Variable { VariableId = 2, VariableName = "b", Value = 14 };
             repo.AddVariable(testVariable);
             //Act
             repo.RemoveVariable(testVariable);
             //Assert 
             Assert.IsFalse(variableList.Contains(testVariable));
+        }
+
+        [TestMethod]
+        public void CanIGetASingleVariableValue()
+        {
+            //Arrange
+            var repo = new VariableRepository(myContext.Object);//my Mock context
+            var testVariable1 = new Variable { VariableId = 2, VariableName = "b", Value = 45 };
+            var testVariable2 = new Variable { VariableId = 3, VariableName = "c", Value = 55 };
+            var testVariable3 = new Variable { VariableId = 4, VariableName = "d", Value = 75 };
+
+            string uservariable = "c";
+            //Act
+            repo.AddVariable(testVariable1);
+            repo.AddVariable(testVariable2);
+            repo.AddVariable(testVariable3);
+
+            //locate the variable you need and return the value
+            int returnValue = repo.FindAndReturnVariableValue(uservariable);
+
+            //Assert
+            Assert.AreEqual(55, returnValue);
         }
     }
 }
