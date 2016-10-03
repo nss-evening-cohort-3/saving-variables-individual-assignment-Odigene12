@@ -49,12 +49,40 @@ namespace SavingVariables.DAL
             return found_variable;
         }
 
+        public Variable FindAndReturnVariable(char variable)
+        {
+            //Get all of the variables in the list and return the value of the variable that matches the uservariable that the user commands.
+            string ComparingVariable = variable.ToString();
+            Variable found_variable = context.Variables.FirstOrDefault(v => v.VariableName.ToLower() == ComparingVariable.ToLower());
+
+            return found_variable;
+        }
+
+
         public void ClearAllVariables()
         {
             List<Variable> myVariables = GetAllVariables();
             context.Variables.RemoveRange(myVariables);
             context.SaveChanges();
 
+        }
+
+        public List<Variable> ShowVariables()
+        {
+            List<Variable> DemVariables = GetAllVariables();
+
+            if (DemVariables.Count() == 0)
+            {
+                Console.WriteLine("Database empty! Nothing to show.");
+            } else
+            {
+                Console.WriteLine("Name" + " ->" + " Value");
+                foreach (Variable variable in DemVariables)
+                {
+                    Console.WriteLine(variable.VariableName + " ->" + " " + variable.Value);
+                }
+            }
+            return DemVariables;
         }
     }
 }

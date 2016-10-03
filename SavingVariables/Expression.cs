@@ -47,79 +47,92 @@ namespace SavingVariables
 
         }
 
-        public bool CheckForCommand(string userinput)
+        public bool ClearRepoCheck(string usercommand)
         {
 
-            if (userinput == "clear all" || userinput == "remove all" || userinput == "delete all")
+            if (usercommand == "clear all" || usercommand == "remove all" || usercommand == "delete all")
             {
                 return true;
                 //clear List of variables.
-            }
-            else if (userinput == "show all")
+            } else return false;
+            
+        }
+
+        public bool CheckForLastq(string usercommand)
+        {
+            if (usercommand == "lastq")
             {
                 return true;
 
             }
-            else if (userinput == "clear (varable)")
+            else return false;
+        }
+
+        public bool CheckToShowVariables(string usercommand)
+        {
+            if (usercommand == "show all")
+            {
+                return true;
+
+            }
+            else return false;
+        }
+
+        public bool CheckForClearVariableCommand(string usercommand)
+        {
+         
+            if (usercommand == "clear" + " " + uservariable || usercommand == "delete" + " " + uservariable || usercommand == "remove" + " " + uservariable)
             {
                 /*do a condition for evaluating if the user wants to clear variable from data.*/
-                return true;
-            }
-            else if (userinput == "lastq")
-            {
                 return true;
             }
             else return false;
         }
 
+        public char ReturnVariable(string userinput)
+        {
+            CommandExtraction(userinput);
+            if (storeexpression.MatchCommand(firstword, secondword) == secondword)
+            {
+                uservariable = System.Convert.ToChar(secondword);
+                return uservariable;
+
+            }
+            else return ' ';
+
+        }
 
         public string CommandExtraction(string userexpression)
         {
-            if (CheckForCommand(userexpression) == true)
-            {
-                string commandPattern = @"^(?<command>[\w]+ \s* (?<command2>[\w]+)$";
+                string commandPattern = @"^(?<command>[\w]+)\s*(?<command2>[\w]+)$";
                 Match matchcommand = Regex.Match(userexpression, commandPattern);
                 firstword = matchcommand.Groups["command"].Value;
                 secondword = matchcommand.Groups["command2"].Value;
-                string command = firstword + secondword;
+                string command = firstword + " " + secondword;
                 storeexpression.MatchCommand(firstword, secondword);
-                if (storeexpression.MatchCommand(firstword, secondword) == secondword)
-                {
-                    char uservariable = System.Convert.ToChar(secondword);
-                }
-                else
-                {
-                    return "not a variable";
-                }
-                return command;
-
-            }
-
-            else return "Extraction Failed";
+            return command;
         }
 
 
         //Use a Regex expression to make sure you extract the variable and value in each user expression and attach them to the variable and value property of the DbSet.
         public Variable ExtractVariableAndValue(string input)
         {
-            if (MatchCheck(input) == true)
-            {
-                string variableExpressionPattern = @"^(?<variable>[a-zA-Z]{1})\s*(?<operator>[=])\s*(?<variablevalue>\-*[\d+])$";
+            
+                string variableExpressionPattern = @"^(?<variable>[a-zA-Z]{1})\s*(?<operator>[=])\s*(?<variablevalue>\-*[\d]+)$";
                 Match matchvariable = Regex.Match(input, variableExpressionPattern);
                 variable = matchvariable.Groups["variable"].Value;
                 variableValue = Convert.ToInt32(matchvariable.Groups["variablevalue"].Value);
                 forexpress.VariableName = variable;
                 forexpress.Value = variableValue;
-                return forexpress;
-            }
-            else if (CheckForVariableCall(input) == true)
-            {
-                string commandForVariablePattern = @"^(?<variable>[a-zA-z]{1})$";
-                Match matchvariable = Regex.Match(input, commandForVariablePattern);
-                variable = matchvariable.Groups["variable"].Value;
-                return forexpress;
-            }
-            else return null;
+            return forexpress;       
+        }
+        
+        public string ExtractVariableForCall(string input)
+        {
+            string commandForVariablePattern = @"^(?<variable>[a-zA-z]{1})$";
+            Match matchvariable = Regex.Match(input, commandForVariablePattern);
+            variable = matchvariable.Groups["variable"].Value;
+            return variable;
 
         }
 
