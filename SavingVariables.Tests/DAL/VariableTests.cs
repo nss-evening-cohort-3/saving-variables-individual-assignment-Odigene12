@@ -164,5 +164,24 @@ namespace SavingVariables.Tests.DAL
             //Assert
             Assert.AreEqual(0, variableList.Count());
         }
+
+        [TestMethod]
+        public void MakeSureIHaveVariablesToDisplayInConsole()
+        {
+            //Arrange
+            var repo = new VariableRepository(myContext.Object);//my Mock context
+            var testVariable1 = new Variable { VariableId = 2, VariableName = "b", Value = 45 };
+            var testVariable2 = new Variable { VariableId = 3, VariableName = "c", Value = 55 };
+            var testVariable3 = new Variable { VariableId = 4, VariableName = "d", Value = 75 };
+
+            //Act
+            repo.AddVariable(testVariable1);
+            repo.AddVariable(testVariable2);
+            repo.AddVariable(testVariable3);
+
+            repo.ShowVariables();
+
+            Assert.AreEqual(4, variableList.Count);
+        }
     }
 }

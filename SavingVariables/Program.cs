@@ -50,12 +50,17 @@ namespace SavingVariables
                     var uservariable = newexpress.ExtractVariableAndValue(userinput);
                     newexpress.lastq = userinput;
                     List<Variable> ContainedVariables =  repo.GetAllVariables();
-                     if (ContainedVariables.Contains(uservariable))
+                    Variable containsConstant = ContainedVariables.FirstOrDefault((v) => v.VariableName == uservariable.VariableName);
+                     if (!containsConstant.Equals(null))
                     {
                         Console.WriteLine("Error! " + uservariable.VariableName + " is already defined!");
-                    } 
+                    }
+                    else
+                    {
                         repo.AddVariable(uservariable);
                         Console.WriteLine("Variable " + uservariable.VariableName + " has now been saved");
+                    }
+                       
                                    
                 }
                 else if (CheckVariableCall == true)
